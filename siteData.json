@@ -7,11 +7,11 @@
       "headings": {
         "about-us": "About Us",
         "project-team": "Project team",
-        "john-doe": "John Doe",
-        "jane-doe": "Jane Doe",
-        "johnny-doe": "Johnny Doe",
-        "jean-doe": "Jean Doe",
-        "james-doe": "James Doe"
+        "craigton-lian-ee-john": "Craigton Lian Ee John",
+        "austin-huang-de-yu": "Austin Huang De Yu",
+        "ivan-lee-kai-kiat": "Ivan Lee Kai Kiat",
+        "celestine-tan-yen-tong": "Celestine Tan Yen Tong",
+        "wang-jingting": "Wang Jingting"
       },
       "headingKeywords": {}
     },
@@ -40,7 +40,7 @@
       "src": "DeveloperGuide.md",
       "title": "Developer Guide",
       "headings": {
-        "ab-3-developer-guide": "AB-3 Developer Guide",
+        "staff-snap-developer-guide": "Staff-Snap Developer Guide",
         "acknowledgements": "Acknowledgements",
         "setting-up-getting-started": "Setting up, getting started",
         "design": "Design",
@@ -105,14 +105,36 @@
     },
     {
       "src": "UserGuide.md",
-      "headings": {},
+      "title": "User Guide",
+      "headings": {
+        "staff-snap-user-guide": "Staff-Snap User Guide",
+        "user-interface-guide": "User Interface Guide",
+        "notation-guide": "Notation Guide",
+        "features": "Features",
+        "add-adding-a-new-employee-entry": "add : Adding a new employee entry",
+        "edit-editing-an-employee-entry": "edit : Editing an employee entry",
+        "ui-mockup": "UI mockup:\n",
+        "list-listing-all-employee-entries": "list : Listing all employee entries",
+        "ui-mockup-2": "UI mockup:\n",
+        "delete-deleting-an-employee-entry": "delete : Deleting an employee entry",
+        "find-finding-an-employee-by-name": "find : Finding an employee by name",
+        "ui-mockup-3": "UI mockup:\n",
+        "sort-sorting-employees-by-descriptor": "sort: Sorting employees by descriptor",
+        "ui-mockup-4": "UI mockup:\n",
+        "filter-filtering-employees-by-descriptor-criteria": "filter: Filtering employees by descriptor criteria",
+        "saving-the-data": "Saving the data",
+        "ui-mockup-there-is-no-ui-to-display-for-this-function": "UI mockup:\nThere is no UI to display for this function.",
+        "clear-purging-all-employee-entries": "clear : Purging all employee entries",
+        "help-listing-all-commands": "help : Listing all commands",
+        "exit-exiting-the-program": "exit : Exiting the program"
+      },
       "headingKeywords": {}
     },
     {
       "src": "index.md",
       "title": "",
       "headings": {
-        "addressbook-level-3": "AddressBook Level-3"
+        "staff-snap": "Staff-Snap"
       },
       "headingKeywords": {}
     },
@@ -122,10 +144,40 @@
       "headingKeywords": {}
     },
     {
-      "src": "team/johndoe.md",
-      "title": "John Doe's Project Portfolio Page",
+      "src": "team/celestinetan03.md",
+      "title": "Project Portfolio Page",
       "headings": {
-        "project-addressbook-level-3": "Project: AddressBook Level 3"
+        "project-staff-snap": "Project: Staff-Snap",
+        "celestine-tan-s-project-portfolio-page": "Celestine Tan's Project Portfolio Page",
+        "overview": "Overview",
+        "summary-of-contributions": "Summary of Contributions"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/craigtonlian.md",
+      "title": "Project Portfolio Page",
+      "headings": {
+        "project-staff-snap": "Project: Staff-Snap",
+        "overview": "Overview",
+        "summary-of-contributions": "Summary of Contributions"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/ivanleekk.md",
+      "headings": {
+        "project-staff-snap": "Project: Staff-Snap",
+        "ivan-lee-s-project-portfolio-page": "Ivan Lee's Project Portfolio Page!",
+        "what-is-staff-snap": "What is Staff-Snap?",
+        "what-have-i-done": "What have I done?"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/jingting1412.md",
+      "headings": {
+        "project-staff-snap": "Project: Staff-Snap"
       },
       "headingKeywords": {}
     },
