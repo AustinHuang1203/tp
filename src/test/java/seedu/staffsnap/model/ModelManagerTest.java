@@ -3,10 +3,10 @@ package seedu.staffsnap.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.staffsnap.model.Model.PREDICATE_SHOW_ALL_EMPLOYEES;
+import static seedu.staffsnap.model.Model.PREDICATE_SHOW_ALL_APPLICANTS;
 import static seedu.staffsnap.testutil.Assert.assertThrows;
-import static seedu.staffsnap.testutil.TypicalEmployees.ALICE;
-import static seedu.staffsnap.testutil.TypicalEmployees.BENSON;
+import static seedu.staffsnap.testutil.TypicalApplicants.ALICE;
+import static seedu.staffsnap.testutil.TypicalApplicants.BENSON;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,8 +15,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.staffsnap.commons.core.GuiSettings;
-import seedu.staffsnap.model.employee.NameContainsKeywordsPredicate;
-import seedu.staffsnap.testutil.AddressBookBuilder;
+import seedu.staffsnap.model.applicant.Applicant;
+import seedu.staffsnap.model.applicant.Descriptor;
+import seedu.staffsnap.model.applicant.NameContainsKeywordsPredicate;
+import seedu.staffsnap.testutil.ApplicantBookBuilder;
 
 public class ModelManagerTest {
 
@@ -26,7 +28,7 @@ public class ModelManagerTest {
     public void constructor() {
         assertEquals(new UserPrefs(), modelManager.getUserPrefs());
         assertEquals(new GuiSettings(), modelManager.getGuiSettings());
-        assertEquals(new AddressBook(), new AddressBook(modelManager.getAddressBook()));
+        assertEquals(new ApplicantBook(), new ApplicantBook(modelManager.getApplicantBook()));
     }
 
     @Test
@@ -37,14 +39,14 @@ public class ModelManagerTest {
     @Test
     public void setUserPrefs_validUserPrefs_copiesUserPrefs() {
         UserPrefs userPrefs = new UserPrefs();
-        userPrefs.setAddressBookFilePath(Paths.get("address/book/file/path"));
+        userPrefs.setApplicantBookFilePath(Paths.get("address/book/file/path"));
         userPrefs.setGuiSettings(new GuiSettings(1, 2, 3, 4));
         modelManager.setUserPrefs(userPrefs);
         assertEquals(userPrefs, modelManager.getUserPrefs());
 
         // Modifying userPrefs should not modify modelManager's userPrefs
         UserPrefs oldUserPrefs = new UserPrefs(userPrefs);
-        userPrefs.setAddressBookFilePath(Paths.get("new/address/book/file/path"));
+        userPrefs.setApplicantBookFilePath(Paths.get("new/address/book/file/path"));
         assertEquals(oldUserPrefs, modelManager.getUserPrefs());
     }
 
@@ -61,47 +63,52 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setAddressBookFilePath_nullPath_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> modelManager.setAddressBookFilePath(null));
+    public void setApplicantBookFilePath_nullPath_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.setApplicantBookFilePath(null));
     }
 
     @Test
-    public void setAddressBookFilePath_validPath_setsAddressBookFilePath() {
+    public void setApplicantBookFilePath_validPath_setsApplicantBookFilePath() {
         Path path = Paths.get("address/book/file/path");
-        modelManager.setAddressBookFilePath(path);
-        assertEquals(path, modelManager.getAddressBookFilePath());
+        modelManager.setApplicantBookFilePath(path);
+        assertEquals(path, modelManager.getApplicantBookFilePath());
     }
 
     @Test
-    public void hasEmployee_nullEmployee_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> modelManager.hasEmployee(null));
+    public void hasApplicant_nullApplicant_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.hasApplicant(null));
     }
 
     @Test
-    public void hasEmployee_employeeNotInAddressBook_returnsFalse() {
-        assertFalse(modelManager.hasEmployee(ALICE));
+    public void hasApplicant_applicantNotInApplicantBook_returnsFalse() {
+        assertFalse(modelManager.hasApplicant(ALICE));
     }
 
     @Test
-    public void hasEmployee_employeeInAddressBook_returnsTrue() {
-        modelManager.addEmployee(ALICE);
-        assertTrue(modelManager.hasEmployee(ALICE));
+    public void hasApplicant_applicantInApplicantBook_returnsTrue() {
+        modelManager.addApplicant(ALICE);
+        assertTrue(modelManager.hasApplicant(ALICE));
     }
 
     @Test
-    public void getFilteredEmployeeList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredEmployeeList().remove(0));
+    public void getFilteredApplicantList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredApplicantList().remove(0));
     }
 
+    @Test
+    public void updateSortedApplicantList_setDescriptor_changesDescriptor() {
+        modelManager.updateSortedApplicantList(Descriptor.PHONE);
+        assert(Applicant.getDescriptor() == Descriptor.PHONE);
+    }
     @Test
     public void equals() {
-        AddressBook addressBook = new AddressBookBuilder().withEmployee(ALICE).withEmployee(BENSON).build();
-        AddressBook differentAddressBook = new AddressBook();
+        ApplicantBook applicantBook = new ApplicantBookBuilder().withApplicant(ALICE).withApplicant(BENSON).build();
+        ApplicantBook differentApplicantBook = new ApplicantBook();
         UserPrefs userPrefs = new UserPrefs();
 
         // same values -> returns true
-        modelManager = new ModelManager(addressBook, userPrefs);
-        ModelManager modelManagerCopy = new ModelManager(addressBook, userPrefs);
+        modelManager = new ModelManager(applicantBook, userPrefs);
+        ModelManager modelManagerCopy = new ModelManager(applicantBook, userPrefs);
         assertTrue(modelManager.equals(modelManagerCopy));
 
         // same object -> returns true
@@ -113,20 +120,20 @@ public class ModelManagerTest {
         // different types -> returns false
         assertFalse(modelManager.equals(5));
 
-        // different addressBook -> returns false
-        assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs)));
+        // different applicantBook -> returns false
+        assertFalse(modelManager.equals(new ModelManager(differentApplicantBook, userPrefs)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getName().fullName.split("\\s+");
-        modelManager.updateFilteredEmployeeList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
-        assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
+        modelManager.updateFilteredApplicantList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
+        assertFalse(modelManager.equals(new ModelManager(applicantBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
-        modelManager.updateFilteredEmployeeList(PREDICATE_SHOW_ALL_EMPLOYEES);
+        modelManager.updateFilteredApplicantList(PREDICATE_SHOW_ALL_APPLICANTS);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
-        differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
-        assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
+        differentUserPrefs.setApplicantBookFilePath(Paths.get("differentFilePath"));
+        assertFalse(modelManager.equals(new ModelManager(applicantBook, differentUserPrefs)));
     }
 }

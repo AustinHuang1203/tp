@@ -2,11 +2,11 @@ package seedu.staffsnap.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import seedu.staffsnap.model.AddressBook;
+import seedu.staffsnap.model.ApplicantBook;
 import seedu.staffsnap.model.Model;
 
 /**
- * Clears the address book.
+ * Clears the applicant book.
  */
 public class ClearCommand extends Command {
 
@@ -17,7 +17,7 @@ public class ClearCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.setAddressBook(new AddressBook());
+        model.setApplicantBook(new ApplicantBook());
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

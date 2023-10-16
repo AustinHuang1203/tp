@@ -1,14 +1,14 @@
 package seedu.staffsnap.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.staffsnap.logic.Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX;
+import static seedu.staffsnap.logic.Messages.MESSAGE_INVALID_APPLICANT_DISPLAYED_INDEX;
 import static seedu.staffsnap.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.staffsnap.logic.commands.CommandTestUtil.DEPARTMENT_DESC_AMY;
-import static seedu.staffsnap.logic.commands.CommandTestUtil.JOB_TITLE_DESC_AMY;
+import static seedu.staffsnap.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.staffsnap.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.staffsnap.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
+import static seedu.staffsnap.logic.commands.CommandTestUtil.POSITION_DESC_AMY;
 import static seedu.staffsnap.testutil.Assert.assertThrows;
-import static seedu.staffsnap.testutil.TypicalEmployees.AMY;
+import static seedu.staffsnap.testutil.TypicalApplicants.AMY;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -25,13 +25,13 @@ import seedu.staffsnap.logic.commands.exceptions.CommandException;
 import seedu.staffsnap.logic.parser.exceptions.ParseException;
 import seedu.staffsnap.model.Model;
 import seedu.staffsnap.model.ModelManager;
-import seedu.staffsnap.model.ReadOnlyAddressBook;
+import seedu.staffsnap.model.ReadOnlyApplicantBook;
 import seedu.staffsnap.model.UserPrefs;
-import seedu.staffsnap.model.employee.Employee;
-import seedu.staffsnap.storage.JsonAddressBookStorage;
+import seedu.staffsnap.model.applicant.Applicant;
+import seedu.staffsnap.storage.JsonApplicantBookStorage;
 import seedu.staffsnap.storage.JsonUserPrefsStorage;
 import seedu.staffsnap.storage.StorageManager;
-import seedu.staffsnap.testutil.EmployeeBuilder;
+import seedu.staffsnap.testutil.ApplicantBuilder;
 
 public class LogicManagerTest {
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
@@ -45,10 +45,10 @@ public class LogicManagerTest {
 
     @BeforeEach
     public void setUp() {
-        JsonAddressBookStorage addressBookStorage =
-                new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
+        JsonApplicantBookStorage applicantBookStorage =
+                new JsonApplicantBookStorage(temporaryFolder.resolve("applicantBook.json"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        StorageManager storage = new StorageManager(applicantBookStorage, userPrefsStorage);
         logic = new LogicManager(model, storage);
     }
 
@@ -61,7 +61,7 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand, MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
+        assertCommandException(deleteCommand, MESSAGE_INVALID_APPLICANT_DISPLAYED_INDEX);
     }
 
     @Test
@@ -83,8 +83,8 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void getFilteredEmployeeList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredEmployeeList().remove(0));
+    public void getFilteredApplicantList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredApplicantList().remove(0));
     }
 
     /**
@@ -123,7 +123,7 @@ public class LogicManagerTest {
      */
     private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
             String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getApplicantBook(), new UserPrefs());
         assertCommandFailure(inputCommand, expectedException, expectedMessage, expectedModel);
     }
 
@@ -149,10 +149,10 @@ public class LogicManagerTest {
     private void assertCommandFailureForExceptionFromStorage(IOException e, String expectedMessage) {
         Path prefPath = temporaryFolder.resolve("ExceptionUserPrefs.json");
 
-        // Inject LogicManager with an AddressBookStorage that throws the IOException e when saving
-        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(prefPath) {
+        // Inject LogicManager with an ApplicantBookStorage that throws the IOException e when saving
+        JsonApplicantBookStorage applicantBookStorage = new JsonApplicantBookStorage(prefPath) {
             @Override
-            public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath)
+            public void saveApplicantBook(ReadOnlyApplicantBook applicantBook, Path filePath)
                     throws IOException {
                 throw e;
             }
@@ -160,16 +160,16 @@ public class LogicManagerTest {
 
         JsonUserPrefsStorage userPrefsStorage =
                 new JsonUserPrefsStorage(temporaryFolder.resolve("ExceptionUserPrefs.json"));
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        StorageManager storage = new StorageManager(applicantBookStorage, userPrefsStorage);
 
         logic = new LogicManager(model, storage);
 
-        // Triggers the saveAddressBook method by executing an add command
+        // Triggers the saveApplicantBook method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
-                + DEPARTMENT_DESC_AMY + JOB_TITLE_DESC_AMY;
-        Employee expectedEmployee = new EmployeeBuilder(AMY).withTags().build();
+                + EMAIL_DESC_AMY + POSITION_DESC_AMY;
+        Applicant expectedApplicant = new ApplicantBuilder(AMY).withInterviews().build();
         ModelManager expectedModel = new ModelManager();
-        expectedModel.addEmployee(expectedEmployee);
+        expectedModel.addApplicant(expectedApplicant);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }
 }

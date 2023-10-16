@@ -9,11 +9,12 @@ import java.util.Set;
 import seedu.staffsnap.commons.core.index.Index;
 import seedu.staffsnap.commons.util.StringUtil;
 import seedu.staffsnap.logic.parser.exceptions.ParseException;
-import seedu.staffsnap.model.employee.Department;
-import seedu.staffsnap.model.employee.JobTitle;
-import seedu.staffsnap.model.employee.Name;
-import seedu.staffsnap.model.employee.Phone;
-import seedu.staffsnap.model.tag.Tag;
+import seedu.staffsnap.model.applicant.Descriptor;
+import seedu.staffsnap.model.applicant.Email;
+import seedu.staffsnap.model.applicant.Name;
+import seedu.staffsnap.model.applicant.Phone;
+import seedu.staffsnap.model.applicant.Position;
+import seedu.staffsnap.model.interview.Interview;
 
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.
@@ -66,59 +67,76 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String jobTitle} into an {@code JobTitle}.
+     * Parses a {@code String position} into an {@code Position}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code jobTitle} is invalid.
+     * @throws ParseException if the given {@code position} is invalid.
      */
-    public static JobTitle parseJobTitle(String jobTitle) throws ParseException {
-        requireNonNull(jobTitle);
-        String trimmedJobTitle = jobTitle.trim();
-        if (!JobTitle.isValidJobTitle(trimmedJobTitle)) {
-            throw new ParseException(JobTitle.MESSAGE_CONSTRAINTS);
+    public static Position parsePosition(String position) throws ParseException {
+        requireNonNull(position);
+        String trimmedPosition = position.trim();
+        if (!Position.isValidPosition(trimmedPosition)) {
+            throw new ParseException(Position.MESSAGE_CONSTRAINTS);
         }
-        return new JobTitle(trimmedJobTitle);
+        return new Position(trimmedPosition);
     }
 
     /**
-     * Parses a {@code String department} into an {@code Department}.
+     * Parses a {@code String email} into an {@code Email}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code department} is invalid.
+     * @throws ParseException if the given {@code email} is invalid.
      */
-    public static Department parseDepartment(String department) throws ParseException {
-        requireNonNull(department);
-        String trimmedDepartment = department.trim();
-        if (!Department.isValidDepartment(trimmedDepartment)) {
-            throw new ParseException(Department.MESSAGE_CONSTRAINTS);
+    public static Email parseEmail(String email) throws ParseException {
+        requireNonNull(email);
+        String trimmedEmail = email.trim();
+        if (!Email.isValidEmail(trimmedEmail)) {
+            throw new ParseException(Email.MESSAGE_CONSTRAINTS);
         }
-        return new Department(trimmedDepartment);
+        return new Email(trimmedEmail);
     }
 
     /**
-     * Parses a {@code String tag} into a {@code Tag}.
+     * Parses a {@code String interview} into a {@code Interview}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code tag} is invalid.
+     * @throws ParseException if the given {@code interview} is invalid.
      */
-    public static Tag parseTag(String tag) throws ParseException {
-        requireNonNull(tag);
-        String trimmedTag = tag.trim();
-        if (!Tag.isValidTagName(trimmedTag)) {
-            throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
+    public static Interview parseInterview(String interview) throws ParseException {
+        requireNonNull(interview);
+        String trimmedInterview = interview.trim();
+        if (!Interview.isValidType(trimmedInterview)) {
+            throw new ParseException(Interview.MESSAGE_CONSTRAINTS);
         }
-        return new Tag(trimmedTag);
+        return new Interview(trimmedInterview);
     }
 
     /**
-     * Parses {@code Collection<String> tags} into a {@code Set<Tag>}.
+     * Parses {@code Collection<String> interviews} into a {@code Set<Interview>}.
      */
-    public static Set<Tag> parseTags(Collection<String> tags) throws ParseException {
-        requireNonNull(tags);
-        final Set<Tag> tagSet = new HashSet<>();
-        for (String tagName : tags) {
-            tagSet.add(parseTag(tagName));
+    public static Set<Interview> parseInterviews(Collection<String> interviews) throws ParseException {
+        requireNonNull(interviews);
+        final Set<Interview> interviewSet = new HashSet<>();
+        for (String interviewName : interviews) {
+            interviewSet.add(parseInterview(interviewName));
         }
-        return tagSet;
+        return interviewSet;
+    }
+
+    /**
+     * Parses a {@code String descriptor} into a {@code Name}.
+     * Leading and trailing whitespaces will be trimmed.
+     * Case-insensitive
+     *
+     * @throws ParseException if the given {@code descriptor} is invalid.
+     */
+    public static Descriptor parseDescriptor(String descriptor) throws ParseException {
+        requireNonNull(descriptor);
+        String trimmedDescriptor = descriptor.trim();
+        Descriptor result = Descriptor.findByName(trimmedDescriptor);
+        if (result == null) {
+            throw new ParseException(Descriptor.MESSAGE_CONSTRAINTS);
+        }
+        return result;
     }
 }

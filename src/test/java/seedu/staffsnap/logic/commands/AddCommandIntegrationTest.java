@@ -2,7 +2,7 @@ package seedu.staffsnap.logic.commands;
 
 import static seedu.staffsnap.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.staffsnap.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.staffsnap.testutil.TypicalEmployees.getTypicalAddressBook;
+import static seedu.staffsnap.testutil.TypicalApplicants.getTypicalApplicantBook;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,8 @@ import seedu.staffsnap.logic.Messages;
 import seedu.staffsnap.model.Model;
 import seedu.staffsnap.model.ModelManager;
 import seedu.staffsnap.model.UserPrefs;
-import seedu.staffsnap.model.employee.Employee;
-import seedu.staffsnap.testutil.EmployeeBuilder;
+import seedu.staffsnap.model.applicant.Applicant;
+import seedu.staffsnap.testutil.ApplicantBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code AddCommand}.
@@ -23,26 +23,26 @@ public class AddCommandIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        model = new ModelManager(getTypicalApplicantBook(), new UserPrefs());
     }
 
     @Test
-    public void execute_newEmployee_success() {
-        Employee validEmployee = new EmployeeBuilder().build();
+    public void execute_newApplicant_success() {
+        Applicant validApplicant = new ApplicantBuilder().build();
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.addEmployee(validEmployee);
+        Model expectedModel = new ModelManager(model.getApplicantBook(), new UserPrefs());
+        expectedModel.addApplicant(validApplicant);
 
-        assertCommandSuccess(new AddCommand(validEmployee), model,
-                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validEmployee)),
+        assertCommandSuccess(new AddCommand(validApplicant), model,
+                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validApplicant)),
                 expectedModel);
     }
 
     @Test
-    public void execute_duplicateEmployee_throwsCommandException() {
-        Employee employeeInList = model.getAddressBook().getEmployeeList().get(0);
-        assertCommandFailure(new AddCommand(employeeInList), model,
-                AddCommand.MESSAGE_DUPLICATE_EMPLOYEE);
+    public void execute_duplicateApplicant_throwsCommandException() {
+        Applicant applicantInList = model.getApplicantBook().getApplicantList().get(0);
+        assertCommandFailure(new AddCommand(applicantInList), model,
+                AddCommand.MESSAGE_DUPLICATE_APPLICANT);
     }
 
 }
